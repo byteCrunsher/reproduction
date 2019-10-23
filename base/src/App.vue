@@ -17,8 +17,12 @@ export default {
       const newBaseUrlSegments = routeSegments.slice(0, appsIndex + 2);
       const newBaseUrl = newBaseUrlSegments.join("/");
       const subAppRoute = localStorage.subAppRouteUpdate;
-      const updatedUrl = newBaseUrl.concat(subAppRoute);
-      history.replaceState(null, null, updatedUrl);
+      if (subAppRoute.startsWith(newBaseUrl)) {
+        history.replaceState(null, null, newBaseUrl);
+      } else {
+        const updatedUrl = newBaseUrl.concat(subAppRoute);
+        history.replaceState(null, null, updatedUrl);
+      }
     });
   }
 };
