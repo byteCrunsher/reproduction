@@ -27,8 +27,26 @@ if (window.location !== window.parent.location) {
 }
 
 router.afterEach((to, from) => {
-	console.log({ urlToAppend: to.path });
-	localStorage.subAppRouteUpdate = to.path;
+	let newPath = '/' + to.path.split('/').pop();
+	const matchingRoutes = router.options.routes.filter(
+		route => route.path === newPath
+	);
+	const isPathInRoutes = matchingRoutes.length > 0;
+
+	if (newPath === router.history.base || !isPathInRoutes) {
+		newPath = '/';
+	}
+
+	let storagePath;
+
+	if (router.currentRoute.path !== newPath) {
+		router.push(newPath);
+		storagePath = newPath;
+	} else {
+		storagePath = to.path;
+	}
+
+	localStorage.subAppRouteUpdate = storagePath;
 });
 
 export default router;
