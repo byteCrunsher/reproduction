@@ -1,9 +1,16 @@
 <template>
-  <div id="customAppContainer"></div>
+  <div>
+    <iframe :src="`http://localhost:3000/subApps/${appKey}`"></iframe>
+  </div>
 </template>
 
 <script>
 export default {
+  data() {
+    return {
+      appKey: ""
+    };
+  },
   async mounted() {
     await this.updateCustomAppContainer();
   },
@@ -12,11 +19,7 @@ export default {
       const fullRoute = this.$router.currentRoute.fullPath;
       const routeSegments = fullRoute.split("/");
       const appsIndex = routeSegments.indexOf("apps");
-      const appKey = routeSegments[appsIndex + 1];
-
-      document.getElementById(
-        "customAppContainer"
-      ).innerHTML = `<object style="width: 100%; height:100%;" data="http://localhost:3000/subApps/${appKey}"></object>`;
+      this.appKey = routeSegments[appsIndex + 1];
     }
   },
   watch: {
